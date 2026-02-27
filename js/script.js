@@ -17,9 +17,9 @@ const setsData = [
         // Cada carta precisa ter um arquivo de imagem em images/cards/base-set/
         cards: [
             { name: 'Charizard',  number: '4/102',  image: 'images/cards/base-set/Charizard_BS_4.jpg' },
-            { name: 'Blastoise',  number: '2/102',  image: 'images/cards/base-set/blastoise.jpg' },
-            { name: 'Venusaur',   number: '15/102', image: 'images/cards/base-set/venusaur.jpg'  },
-            { name: 'Pikachu',    number: '58/102', image: 'images/cards/base-set/pikachu.jpg'   },
+            { name: 'Blastoise',  number: '2/102',  image: 'images/cards/base-set/Blastoise_BS_2.jpg' },
+            { name: 'Venusaur',   number: '15/102', image: 'images/cards/base-set/Venusaur_BS_15.jpg'  },
+            { name: 'Pikachu',    number: '58/102', image: 'images/cards/base-set/Pikachu_BS_58.jpg'   },
             // Adicione mais cartas aqui seguindo o mesmo padrão
         ]
     },
