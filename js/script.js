@@ -1,180 +1,160 @@
-// Dados dos Sets
+// Configuração da API
+const API_BASE = 'https://api.pokemontcg.io/v2';
+const API_KEY = 'SUA_CHAVE_AQUI'; // Opcional - sem chave dá 1000 requests/dia
+
+// Dados dos Sets (agora com IDs oficiais da API)
 const setsData = [
     {
-        id: 'base-set',
+        id: 'base1', // ID oficial da API para Base Set
         name: 'Base Set',
         year: '1999',
-        image: 'https://via.placeholder.com/300x200/ff6b6b/ffffff?text=Base+Set',
         cardCount: 102,
-        description: 'A edição que começou tudo'
+        description: 'A edição que começou tudo',
+        apiSetId: 'base1'
     },
     {
-        id: 'fossil',
+        id: 'base3', // ID oficial para Fossil
         name: 'Fossil',
         year: '1999',
-        image: 'https://via.placeholder.com/300x200/4ecdc4/ffffff?text=Fossil',
         cardCount: 62,
-        description: 'Pokémon pré-históricos'
+        description: 'Pokémon pré-históricos',
+        apiSetId: 'base3'
     },
     {
-        id: 'jungle',
+        id: 'base2', // ID oficial para Jungle
         name: 'Jungle',
         year: '1999',
-        image: 'https://via.placeholder.com/300x200/45b7d1/ffffff?text=Jungle',
         cardCount: 64,
-        description: 'Aventura na selva'
+        description: 'Aventura na selva',
+        apiSetId: 'base2'
     }
 ];
 
-// Dados das cartas em destaque
-const featuredCardsData = [
-    { name: 'Charizard', number: '4/102', set: 'Base Set', image: 'https://via.placeholder.com/200x150/f6d365/ffffff?text=Charizard' },
-    { name: 'Blastoise', number: '2/102', set: 'Base Set', image: 'https://via.placeholder.com/200x150/ff9f43/ffffff?text=Blastoise' },
-    { name: 'Venusaur', number: '15/102', set: 'Base Set', image: 'https://via.placeholder.com/200x150/ff6b6b/ffffff?text=Venusaur' },
-    { name: 'Dragonite', number: '4/62', set: 'Fossil', image: 'https://via.placeholder.com/200x150/4ecdc4/ffffff?text=Dragonite' },
-    { name: 'Aerodactyl', number: '16/62', set: 'Fossil', image: 'https://via.placeholder.com/200x150/45b7d1/ffffff?text=Aerodactyl' },
-    { name: 'Pikachu', number: '58/64', set: 'Jungle', image: 'https://via.placeholder.com/200x150/f9ca24/ffffff?text=Pikachu' }
-];
+// Função para buscar imagem do set da API
+async function fetchSetImage(setId) {
+    try {
+        const response = await fetch(`${API_BASE}/sets/${setId}`);
+        const data = await response.json();
+        // Retorna a imagem do símbolo do set ou uma imagem padrão
+        return data.data.images.symbol || data.data.images.logo;
+    } catch (error) {
+        console.error('Erro ao buscar imagem do set:', error);
+        // Fallback para imagem SVG genérica
+        return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" viewBox="0 0 300 200"><rect width="300" height="200" fill="%23ff6b6b"/><text x="50" y="120" font-family="Arial" font-size="24" fill="white" font-weight="bold">${setId}</text></svg>`;
+    }
+}
 
-// Função para criar cards dos sets
-function createSetCards() {
+// Função para buscar cartas em destaque da API
+async function fetchFeaturedCards() {
+    try {
+        // Busca cartas famosas dos sets clássicos
+        const response = await fetch(`${API_BASE}/cards?q=set.id:base1 OR set.id:base2 OR set.id:base3&pageSize=6&orderBy=number`);
+        const data = await response.json();
+        
+        return data.data.map(card => ({
+            name: card.name,
+            number: card.number,
+            set: card.set.name,
+            image: card.images.small,
+            id: card.id
+        }));
+    } catch (error) {
+        console.error('Erro ao buscar cartas:', error);
+        // Fallback para dados locais
+        return getLocalFeaturedCards();
+    }
+}
+
+// Fallback local caso a API falhe
+function getLocalFeaturedCards() {
+    return [
+        { name: 'Charizard', number: '4/102', set: 'Base Set', image: '' },
+        { name: 'Blastoise', number: '2/102', set: 'Base Set', image: '' },
+        { name: 'Venusaur', number: '15/102', set: 'Base Set', image: '' },
+        { name: 'Dragonite', number: '4/62', set: 'Fossil', image: '' },
+        { name: 'Aerodactyl', number: '16/62', set: 'Fossil', image: '' },
+        { name: 'Pikachu', number: '58/64', set: 'Jungle', image: '' }
+    ];
+}
+
+// Função principal para criar cards dos sets (agora assíncrona)
+async function createSetCards() {
     const setsGrid = document.getElementById('setsGrid');
+    setsGrid.innerHTML = '<div class="loading">Carregando sets...</div>';
     
-    setsData.forEach(set => {
-        const card = document.createElement('div');
-        card.className = 'set-card';
-        card.onclick = () => window.location.href = `${set.id}.html`;
+    try {
+        const setsWithImages = await Promise.all(
+            setsData.map(async (set) => {
+                const imageUrl = await fetchSetImage(set.apiSetId);
+                return { ...set, image: imageUrl };
+            })
+        );
         
-        card.innerHTML = `
-            <img src="${set.image}" alt="${set.name}" class="set-image">
-            <div class="set-info">
-                <h3 class="set-name">${set.name}</h3>
-                <p class="set-year"><i class="far fa-calendar-alt"></i> ${set.year}</p>
-                <p style="color: var(--text-secondary); margin: 0.5rem 0;">${set.description}</p>
-                <span class="set-badge">${set.cardCount} cartas</span>
-            </div>
-        `;
+        setsGrid.innerHTML = '';
         
-        setsGrid.appendChild(card);
-    });
-}
-
-// Função para criar cards em destaque
-function createFeaturedCards() {
-    const featuredGrid = document.getElementById('featuredGrid');
-    
-    featuredCardsData.forEach(card => {
-        const cardElement = document.createElement('div');
-        cardElement.className = 'featured-card';
-        
-        cardElement.innerHTML = `
-            <img src="${card.image}" alt="${card.name}">
-            <div class="featured-card-info">
-                <h4 class="featured-card-name">${card.name}</h4>
-                <p class="featured-card-number">${card.number}</p>
-                <small style="color: var(--accent-primary);">${card.set}</small>
-            </div>
-        `;
-        
-        featuredGrid.appendChild(cardElement);
-    });
-}
-
-// Theme Toggle
-function initThemeToggle() {
-    const themeToggle = document.getElementById('themeToggle');
-    const icon = themeToggle.querySelector('i');
-    
-    // Verificar preferência salva
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        icon.classList.remove('fa-moon');
-        icon.classList.add('fa-sun');
+        setsWithImages.forEach(set => {
+            const card = document.createElement('div');
+            card.className = 'set-card';
+            card.onclick = () => window.location.href = `${set.id}.html`;
+            
+            card.innerHTML = `
+                <img src="${set.image}" alt="${set.name}" class="set-image" 
+                     onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'300\\' height=\\'200\\' viewBox=\\'0 0 300 200\\'><rect width=\\'300\\' height=\\'200\\' fill=\\'%23ff6b6b\\'/><text x=\\'50\\' y=\\'120\\' font-family=\\'Arial\\' font-size=\\'24\\' fill=\\'white\\' font-weight=\\'bold\\'>${set.name}</text></svg>'">
+                <div class="set-info">
+                    <h3 class="set-name">${set.name}</h3>
+                    <p class="set-year"><i class="far fa-calendar-alt"></i> ${set.year}</p>
+                    <p style="color: var(--text-secondary); margin: 0.5rem 0;">${set.description}</p>
+                    <span class="set-badge">${set.cardCount} cartas</span>
+                </div>
+            `;
+            
+            setsGrid.appendChild(card);
+        });
+    } catch (error) {
+        console.error('Erro ao criar cards:', error);
+        setsGrid.innerHTML = '<p style="text-align: center; color: red;">Erro ao carregar sets. Tente novamente mais tarde.</p>';
     }
+}
+
+// Função para criar cards em destaque (agora assíncrona)
+async function createFeaturedCards() {
+    const featuredGrid = document.getElementById('featuredGrid');
+    featuredGrid.innerHTML = '<div class="loading">Carregando cartas em destaque...</div>';
     
-    themeToggle.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
+    try {
+        const cards = await fetchFeaturedCards();
         
-        if (currentTheme === 'dark') {
-            document.documentElement.removeAttribute('data-theme');
-            localStorage.setItem('theme', 'light');
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
-        } else {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            localStorage.setItem('theme', 'dark');
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
-        }
-    });
-}
-
-// Mobile Menu
-function initMobileMenu() {
-    const menuBtn = document.querySelector('.mobile-menu-btn');
-    const navLinks = document.querySelector('.nav-links');
-    
-    menuBtn.addEventListener('click', () => {
-        navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-    });
-    
-    // Ajustar quando redimensionar a tela
-    window.addEventListener('resize', () => {
-        if (window.innerWidth > 768) {
-            navLinks.style.display = 'flex';
-        } else {
-            navLinks.style.display = 'none';
-        }
-    });
-}
-
-// Smooth Scroll para links internos
-function initSmoothScroll() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
+        featuredGrid.innerHTML = '';
+        
+        cards.forEach(card => {
+            const cardElement = document.createElement('div');
+            cardElement.className = 'featured-card';
+            
+            cardElement.innerHTML = `
+                <img src="${card.image || 'https://via.placeholder.com/200x150/ff6b6b/ffffff?text=Carregando...'}" 
+                     alt="${card.name}"
+                     onerror="this.src='https://via.placeholder.com/200x150/ff6b6b/ffffff?text=${card.name.replace(' ', '+')}'">
+                <div class="featured-card-info">
+                    <h4 class="featured-card-name">${card.name}</h4>
+                    <p class="featured-card-number">${card.number}</p>
+                    <small style="color: var(--accent-primary);">${card.set}</small>
+                </div>
+            `;
+            
+            featuredGrid.appendChild(cardElement);
         });
-    });
+    } catch (error) {
+        console.error('Erro ao criar cards em destaque:', error);
+        featuredGrid.innerHTML = '<p style="text-align: center; color: red;">Erro ao carregar cartas em destaque.</p>';
+    }
 }
 
-// Animação de entrada dos cards
-function initScrollAnimation() {
-    const cards = document.querySelectorAll('.set-card, .featured-card');
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, { threshold: 0.1 });
-    
-    cards.forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-        card.style.transition = 'opacity 0.5s, transform 0.5s';
-        observer.observe(card);
-    });
-}
-
-// Inicializar tudo quando a página carregar
-document.addEventListener('DOMContentLoaded', () => {
-    createSetCards();
-    createFeaturedCards();
+// Modifique a inicialização para funções assíncronas
+document.addEventListener('DOMContentLoaded', async () => {
+    await createSetCards();
+    await createFeaturedCards();
     initThemeToggle();
     initMobileMenu();
     initSmoothScroll();
     initScrollAnimation();
-    
-    // Loading state simulation (opcional)
-    console.log('Site da coleção Pokémon TCG carregado!');
 });

@@ -507,4 +507,24 @@ body {
     background: linear-gradient(90deg, var(--card-bg) 25%, var(--bg-primary) 50%, var(--card-bg) 75%);
     background-size: 1000px 100%;
     animation: shimmer 2s infinite;
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    grid-column: 1 / -1;
+}
+
+/* Error Handling */
+.set-card img[onerror] {
+    opacity: 0.8;
+}
+
+/* Suavizar carregamento das imagens */
+.set-image, .featured-card img {
+    transition: opacity 0.3s;
+    opacity: 0;
+}
+
+.set-image.loaded, .featured-card img.loaded {
+    opacity: 1;
 }
