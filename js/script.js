@@ -1,6 +1,6 @@
 // Configuração da API
 const API_BASE = 'https://api.pokemontcg.io/v2';
-const API_KEY = 'SUA_CHAVE_AQUI'; // Opcional - sem chave dá 1000 requests/dia
+const API_KEY = '6acad21f04e5574fed6c7fe4dd4de3728aa2a712cfda499f9858c8371b56cad0'; // Opcional - sem chave dá 1000 requests/dia
 
 // Dados dos Sets (agora com IDs oficiais da API)
 const setsData = [
