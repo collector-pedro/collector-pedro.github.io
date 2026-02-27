@@ -4,55 +4,72 @@ const setsData = [
         id: 'base-set',
         name: 'Base Set',
         year: '1999',
-        image: 'images/sets/base-set.png', // Você precisa criar essa imagem
+        image: './images/sets/base-set.png', // Caminho relativo correto
         cardCount: 102,
         description: 'A edição que começou tudo',
         folder: 'base-set',
-        prefix: 'BS' // Prefixo usado nos arquivos (ex: Abra_BS_43)
+        prefix: 'BS',
+        color: '#ff6b6b'
     },
     {
         id: 'fossil',
         name: 'Fossil',
         year: '1999',
-        image: 'images/sets/fossil.png',
+        image: './images/sets/fossil.png',
         cardCount: 62,
         description: 'Pokémon pré-históricos',
         folder: 'fossil',
-        prefix: 'FO' // Ajuste conforme seus arquivos
+        prefix: 'FO',
+        color: '#4ecdc4'
     },
     {
         id: 'jungle',
         name: 'Jungle',
         year: '1999',
-        image: 'images/sets/jungle.png',
+        image: './images/sets/jungle.png',
         cardCount: 64,
         description: 'Aventura na selva',
         folder: 'jungle',
-        prefix: 'JU' // Ajuste conforme seus arquivos
+        prefix: 'JU',
+        color: '#45b7d1'
+    },
+    {
+        id: 'team-rocket',
+        name: 'Team Rocket',
+        year: '2000',
+        image: './images/sets/team-rocket.png',
+        cardCount: 83,
+        description: 'A primeira expansão dos vilões',
+        folder: 'team-rocket',
+        prefix: 'RO',
+        color: '#6c5ce7'
     }
 ];
 
 // Função para criar cards dos sets na página inicial
 function createSetCards() {
     const setsGrid = document.getElementById('setsGrid');
-    if (!setsGrid) return;
+    if (!setsGrid) {
+        console.log('setsGrid não encontrado - provavelmente é página de set');
+        return;
+    }
     
     setsGrid.innerHTML = '';
+    console.log('Criando cards dos sets...');
     
     setsData.forEach(set => {
         const card = document.createElement('div');
         card.className = 'set-card';
         card.onclick = () => window.location.href = `${set.id}.html`;
         
-        // Fallback colorido caso a imagem do set não exista
-        const fallbackColor = set.id === 'base-set' ? '#ff6b6b' : 
-                             set.id === 'fossil' ? '#4ecdc4' : '#45b7d1';
+        // Fallback elegante
+        const fallbackSVG = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='300' height='200' fill='${set.color}'/><text x='50' y='120' font-family='Arial' font-size='24' fill='white' font-weight='bold'>${set.name}</text></svg>`;
         
         card.innerHTML = `
             <img src="${set.image}" 
                  alt="${set.name}" 
                  class="set-image"
-                 onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'300\\' height=\\'200\\' viewBox=\\'0 0 300 200\\'><rect width=\\'300\\' height=\\'200\\' fill=\\'${fallbackColor}\\'/><text x=\\'50\\' y=\\'120\\' font-family=\\'Arial\\' font-size=\\'24\\' fill=\\'white\\' font-weight=\\'bold\\'>${set.name}</text></svg>'">
+                 onerror="this.src='${fallbackSVG}'; console.log('Fallback para ${set.name}')">
             <div class="set-info">
                 <h3 class="set-name">${set.name}</h3>
                 <p class="set-year"><i class="far fa-calendar-alt"></i> ${set.year}</p>
@@ -65,41 +82,60 @@ function createSetCards() {
     });
 }
 
-// Função para listar cartas de um set específico
-async function listCardsFromSet(setId) {
+// Função para listar cartas de um set
+function getCardsFromSet(setId) {
     const set = setsData.find(s => s.id === setId);
     if (!set) return [];
     
-    // Aqui você pode:
-    // Opção 1: Listar arquivos via API (mais dinâmico)
-    // Opção 2: Ter um arquivo JSON com a lista (mais controlado)
-    // Opção 3: Gerar dinamicamente (recomendo a 2 ou 3)
+    // Lista manual das cartas em destaque (você pode expandir)
+    const cardsMap = {
+        'base-set': [
+            { name: 'Charizard', number: '4' },
+            { name: 'Blastoise', number: '2' },
+            { name: 'Venusaur', number: '15' },
+            { name: 'Pikachu', number: '58' },
+            { name: 'Mewtwo', number: '10' },
+            { name: 'Gyarados', number: '6' }
+        ],
+        'fossil': [
+            { name: 'Dragonite', number: '4' },
+            { name: 'Aerodactyl', number: '16' },
+            { name: 'Zapdos', number: '15' },
+            { name: 'Articuno', number: '2' },
+            { name: 'Moltres', number: '12' }
+        ],
+        'jungle': [
+            { name: 'Pikachu', number: '60' },
+            { name: 'Snorlax', number: '11' },
+            { name: 'Scyther', number: '10' },
+            { name: 'Vaporeon', number: '12' },
+            { name: 'Jolteon', number: '4' }
+        ],
+        'team-rocket': [
+            { name: 'Dark_Charizard', number: '4' },
+            { name: 'Dark_Blastoise', number: '3' },
+            { name: 'Dark_Dragonite', number: '5' },
+            { name: 'Dark_Gyarados', number: '8' }
+        ]
+    };
     
-    // Por enquanto, vamos simular com base no prefixo
-    const cards = [];
-    const totalCards = set.cardCount;
-    
-    for (let i = 1; i <= totalCards; i++) {
-        // Formato: Nome_Set_Numero.jpg
-        // Exemplo: Abra_BS_43.jpg
-        const numero = i.toString().padStart(3, '0');
-        cards.push({
-            name: `Carta ${i}`, // Idealmente você teria os nomes reais
-            number: `${i}/${totalCards}`,
-            image: `images/cards/${set.folder}/${set.prefix}_${numero}.jpg`,
-            set: set.name
-        });
-    }
-    
-    return cards;
+    return (cardsMap[setId] || []).map(card => ({
+        ...card,
+        image: `./images/cards/${set.folder}/${card.name}_${set.prefix}_${card.number}.jpg`,
+        set: set.name
+    }));
 }
 
-// Função para criar a grade de cartas em uma página de set
-async function createSetPage(setId) {
+// Função para criar a página do set
+function createSetPage(setId) {
     const cardsGrid = document.getElementById('cardsGrid');
-    if (!cardsGrid) return;
+    const setTitle = document.getElementById('setTitle');
+    const setDescription = document.getElementById('setDescription');
     
-    cardsGrid.innerHTML = '<div class="loading">Carregando cartas...</div>';
+    if (!cardsGrid || !setTitle || !setDescription) {
+        console.log('Elementos da página de set não encontrados');
+        return;
+    }
     
     const set = setsData.find(s => s.id === setId);
     if (!set) {
@@ -107,28 +143,33 @@ async function createSetPage(setId) {
         return;
     }
     
-    // Atualiza título da página
-    document.getElementById('setTitle').textContent = set.name;
-    document.getElementById('setDescription').textContent = set.description;
+    setTitle.textContent = set.name;
+    setDescription.textContent = set.description;
     
-    const cards = await listCardsFromSet(setId);
-    
+    const cards = getCardsFromSet(setId);
     cardsGrid.innerHTML = '';
+    
+    if (cards.length === 0) {
+        cardsGrid.innerHTML = '<p>Nenhuma carta encontrada para este set</p>';
+        return;
+    }
     
     cards.forEach(card => {
         const cardElement = document.createElement('div');
-        cardElement.className = 'card-carta';
+        cardElement.className = 'featured-card'; // Reutilizando estilo
+        
+        // Fallback colorido
+        const fallbackDiv = `<div style="width:100%; height:150px; background: linear-gradient(135deg, ${set.color}, ${set.color}dd); display: flex; align-items: center; justify-content: center; border-radius: 8px 8px 0 0;"><span style="color: white; font-size: 2rem; font-weight: bold;">${card.name.charAt(0)}</span></div>`;
         
         cardElement.innerHTML = `
-            <div class="card-imagem">
-                <img src="${card.image}" 
-                     alt="${card.name}"
-                     loading="lazy"
-                     onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'200\\' height=\\'280\\' viewBox=\\'0 0 200 280\\'><rect width=\\'200\\' height=\\'280\\' fill=\\'%23cccccc\\'/><text x=\\'20\\' y=\\'140\\' font-family=\\'Arial\\' font-size=\\'14\\' fill=\\'%23333\\'>${card.name}</text></svg>'">
-            </div>
-            <div class="card-info">
-                <h3>${card.name}</h3>
-                <p class="card-numero">${card.number}</p>
+            <img src="${card.image}" 
+                 alt="${card.name}"
+                 style="width:100%; height:150px; object-fit: cover; border-radius: 8px 8px 0 0;"
+                 onerror="this.style.display='none'; this.parentNode.innerHTML += '${fallbackDiv}'; console.log('Fallback para ${card.name}')">
+            <div class="featured-card-info">
+                <h4 class="featured-card-name">${card.name.replace(/_/g, ' ')}</h4>
+                <p class="featured-card-number">${card.number}</p>
+                <small style="color: var(--accent-primary);">${card.set}</small>
             </div>
         `;
         
@@ -141,34 +182,33 @@ function createFeaturedCards() {
     const featuredGrid = document.getElementById('featuredGrid');
     if (!featuredGrid) return;
     
-    // Cartas famosas para destaque (com seus nomes reais)
-    const featuredCards = [
-        { name: 'Charizard', set: 'Base Set', numero: '4', setFolder: 'base-set', prefix: 'BS' },
-        { name: 'Blastoise', set: 'Base Set', numero: '2', setFolder: 'base-set', prefix: 'BS' },
-        { name: 'Venusaur', set: 'Base Set', numero: '15', setFolder: 'base-set', prefix: 'BS' },
-        { name: 'Dragonite', set: 'Fossil', numero: '4', setFolder: 'fossil', prefix: 'FO' },
-        { name: 'Aerodactyl', set: 'Fossil', numero: '16', setFolder: 'fossil', prefix: 'FO' },
-        { name: 'Pikachu', set: 'Jungle', numero: '60', setFolder: 'jungle', prefix: 'JU' }
-    ];
+    featuredGrid.innerHTML = '<div class="loading">Carregando cartas em destaque...</div>';
+    
+    // Pega cartas de todos os sets
+    const allFeatured = [
+        ...getCardsFromSet('base-set'),
+        ...getCardsFromSet('fossil'),
+        ...getCardsFromSet('jungle'),
+        ...getCardsFromSet('team-rocket')
+    ].slice(0, 8); // Mostra só 8 cartas
     
     featuredGrid.innerHTML = '';
     
-    featuredCards.forEach(card => {
+    allFeatured.forEach(card => {
         const cardElement = document.createElement('div');
         cardElement.className = 'featured-card';
         
-        // Monta o caminho da imagem
-        const numeroFormatado = card.numero.padStart(3, '0');
-        const imagePath = `images/cards/${card.setFolder}/${card.prefix}_${numeroFormatado}.jpg`;
+        const set = setsData.find(s => s.name === card.set);
+        const fallbackDiv = `<div style="width:100%; height:150px; background: linear-gradient(135deg, ${set?.color || '#ff6b6b'}, ${set?.color || '#ff6b6b'}dd); display: flex; align-items: center; justify-content: center; border-radius: 8px 8px 0 0;"><span style="color: white; font-size: 2rem; font-weight: bold;">${card.name.charAt(0)}</span></div>`;
         
         cardElement.innerHTML = `
-            <img src="${imagePath}" 
+            <img src="${card.image}" 
                  alt="${card.name}"
-                 loading="lazy"
-                 onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'200\\' height=\\'150\\' viewBox=\\'0 0 200 150\\'><rect width=\\'200\\' height=\\'150\\' fill=\\'%23${Math.floor(Math.random()*16777215).toString(16)}\\'/><text x=\\'20\\' y=\\'80\\' font-family=\\'Arial\\' font-size=\\'16\\' fill=\\'white\\'>${card.name}</text></svg>'">
+                 style="width:100%; height:150px; object-fit: cover; border-radius: 8px 8px 0 0;"
+                 onerror="this.style.display='none'; this.parentNode.innerHTML += '${fallbackDiv}';">
             <div class="featured-card-info">
-                <h4 class="featured-card-name">${card.name}</h4>
-                <p class="featured-card-number">${card.numero}</p>
+                <h4 class="featured-card-name">${card.name.replace(/_/g, ' ')}</h4>
+                <p class="featured-card-number">${card.number}</p>
                 <small style="color: var(--accent-primary);">${card.set}</small>
             </div>
         `;
@@ -177,25 +217,113 @@ function createFeaturedCards() {
     });
 }
 
+// Theme Toggle (igual ao anterior)
+function initThemeToggle() {
+    const themeToggle = document.getElementById('themeToggle');
+    if (!themeToggle) return;
+    
+    const icon = themeToggle.querySelector('i');
+    const savedTheme = localStorage.getItem('theme');
+    
+    if (savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        icon?.classList.replace('fa-moon', 'fa-sun');
+    }
+    
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        
+        if (currentTheme === 'dark') {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+            icon?.classList.replace('fa-sun', 'fa-moon');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            icon?.classList.replace('fa-moon', 'fa-sun');
+        }
+    });
+}
+
+// Mobile Menu
+function initMobileMenu() {
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    
+    if (!menuBtn || !navLinks) return;
+    
+    menuBtn.addEventListener('click', () => {
+        navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+    });
+    
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            navLinks.style.display = 'flex';
+        } else {
+            navLinks.style.display = 'none';
+        }
+    });
+}
+
+// Smooth Scroll
+function initSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+}
+
+// Scroll Animation
+function initScrollAnimation() {
+    const cards = document.querySelectorAll('.set-card, .featured-card');
+    if (cards.length === 0) return;
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    cards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.5s, transform 0.5s';
+        observer.observe(card);
+    });
+}
+
 // Inicialização
 document.addEventListener('DOMContentLoaded', () => {
-    // Detecta se é página de set ou página inicial
-    if (document.getElementById('cardsGrid')) {
-        // É uma página de set - pega o ID da URL
-        const pathParts = window.location.pathname.split('/');
-        const pageName = pathParts[pathParts.length - 1].replace('.html', '');
-        createSetPage(pageName);
+    console.log('DOM carregado, inicializando...');
+    
+    // Detecta qual página estamos
+    const path = window.location.pathname;
+    console.log('Caminho atual:', path);
+    
+    if (path.includes('base-set.html')) {
+        createSetPage('base-set');
+    } else if (path.includes('fossil.html')) {
+        createSetPage('fossil');
+    } else if (path.includes('jungle.html')) {
+        createSetPage('jungle');
+    } else if (path.includes('team-rocket.html')) {
+        createSetPage('team-rocket');
     } else {
-        // É a página inicial
+        // Página inicial
         createSetCards();
         createFeaturedCards();
     }
     
-    // Inicializa outras funcionalidades
     initThemeToggle();
     initMobileMenu();
     initSmoothScroll();
     initScrollAnimation();
 });
-
-// Mantenha suas outras funções (theme toggle, mobile menu, etc.) iguais
