@@ -103,16 +103,41 @@ function createFeaturedCards() {
         cardElement.className = 'featured-card';
         
         const imagePath = 'images/cards/' + card.setFolder + '/' + card.name.replace(' ', '_') + '_' + card.prefix + '_' + card.number + '.jpg';
-        const fallbackDiv = '<div style="width:100%; height:150px; background: linear-gradient(135deg, ' + card.color + ', ' + card.color + 'dd); display: flex; align-items: center; justify-content: center; border-radius: 8px 8px 0 0;"><span style="color: white; font-size: 2rem; font-weight: bold;">' + card.name.charAt(0) + '</span></div>';
         
-        cardElement.innerHTML = 
-            '<img src="' + imagePath + '" alt="' + card.name + '" style="width:100%; height:150px; object-fit: cover; border-radius: 8px 8px 0 0;" onerror="this.style.display=\'none\'; this.parentNode.innerHTML = \'' + fallbackDiv + '\' + this.parentNode.innerHTML;">' +
-            '<div class="featured-card-info">' +
+        // Fallback mais simples
+        const fallbackDiv = document.createElement('div');
+        fallbackDiv.style.width = '100%';
+        fallbackDiv.style.height = '150px';
+        fallbackDiv.style.background = 'linear-gradient(135deg, ' + card.color + ', ' + card.color + 'dd)';
+        fallbackDiv.style.display = 'flex';
+        fallbackDiv.style.alignItems = 'center';
+        fallbackDiv.style.justifyContent = 'center';
+        fallbackDiv.style.borderRadius = '8px 8px 0 0';
+        fallbackDiv.innerHTML = '<span style="color: white; font-size: 2rem; font-weight: bold;">' + card.name.charAt(0) + '</span>';
+        
+        const img = document.createElement('img');
+        img.src = imagePath;
+        img.alt = card.name;
+        img.style.width = '100%';
+        img.style.height = '150px';
+        img.style.objectFit = 'cover';
+        img.style.borderRadius = '8px 8px 0 0';
+        
+        img.onerror = function() {
+            this.style.display = 'none';
+            this.parentNode.insertBefore(fallbackDiv.cloneNode(true), this);
+        };
+        
+        cardElement.appendChild(img);
+        
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'featured-card-info';
+        infoDiv.innerHTML = 
             '<h4 class="featured-card-name">' + card.name + '</h4>' +
             '<p class="featured-card-number">' + card.number + '</p>' +
-            '<small style="color: var(--accent-primary);">' + card.set + '</small>' +
-            '</div>';
+            '<small style="color: var(--accent-primary);">' + card.set + '</small>';
         
+        cardElement.appendChild(infoDiv);
         featuredGrid.appendChild(cardElement);
     }
 }
