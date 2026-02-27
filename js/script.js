@@ -4,7 +4,7 @@ const setsData = [
         id: 'base-set',
         name: 'Base Set',
         year: '1999',
-        image: 'images/cards/base-set/fossil.png', // Ajuste o nome real
+        image: 'images/cards/base-set/base-set.png', // Ajuste o nome real
         cardCount: 102,
         description: 'A edicao que comecou tudo',
         folder: 'base-set',
@@ -37,7 +37,7 @@ const setsData = [
         id: 'team-rocket',
         name: 'Team Rocket',
         year: '2000',
-        image: 'images/cards/team-rocket/team_rocket.png', // Verifique o nome exato
+        image: 'images/cards/team-rocket/team-rocket.png', // Verifique o nome exato
         cardCount: 83,
         description: 'A primeira expansao dos viloes',
         folder: 'team-rocket',
