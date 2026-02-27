@@ -522,7 +522,6 @@ body {
 /* Suavizar carregamento das imagens */
 .set-image, .featured-card img {
     transition: opacity 0.3s;
-    opacity: 0;
 }
 
 .set-image.loaded, .featured-card img.loaded {
