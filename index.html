@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pedro's Absol Collection</title>
+    <title>Pedro's Absol Collection - Pokémon TCG</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎴</text></svg>">
+    <!-- Favicon emoji - sem erro 404 -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%236b4f8c'>🎴</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -21,7 +22,9 @@
                 <li><a href="#colecao" class="nav-link">Coleção</a></li>
                 <li><a href="#sobre" class="nav-link">Sobre</a></li>
             </ul>
-            <button class="theme-toggle" id="themeToggle">🌓</button>
+            <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">
+                <span class="theme-icon">🌓</span>
+            </button>
         </nav>
     </header>
 
@@ -29,13 +32,22 @@
         <section id="home" class="hero">
             <div class="hero-content">
                 <h1 class="hero-title">Minha Coleção <span class="gradient-text">Absol</span></h1>
-                <p class="hero-subtitle">Explorando as cartas mais raras e fascinantes do Pokémon Absol.</p>
-                <a href="#colecao" class="btn btn-primary">Ver Coleção</a>
+                <p class="hero-subtitle">Explorando as cartas mais raras e fascinantes do Pokémon Absol através das edições Base, Fossil e muito mais.</p>
+                <div class="hero-buttons">
+                    <a href="#colecao" class="btn btn-primary">Ver Coleção</a>
+                    <a href="#sobre" class="btn btn-outline">Sobre Mim</a>
+                </div>
             </div>
             <div class="hero-image">
                 <div class="absol-card">
-                    <!-- Imagem usando emoji como fallback -->
-                    <div class="card-placeholder">🎴</div>
+                    <!-- Card totalmente em CSS/emoji - sem imagem externa -->
+                    <div class="absol-card-content">
+                        <div class="absol-card-emoji">🎴</div>
+                        <div class="absol-card-title">ABSOL</div>
+                        <div class="absol-card-subtitle">Dark Pokémon</div>
+                        <div class="absol-card-glow"></div>
+                    </div>
+                    <div class="card-glow"></div>
                 </div>
             </div>
         </section>
@@ -44,19 +56,19 @@
             <div class="stats-container">
                 <div class="stat-item">
                     <span class="stat-number" id="totalCards">0</span>
-                    <span class="stat-label">Cartas</span>
+                    <span class="stat-label">Cartas no Total</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-number" id="uniqueCards">0</span>
-                    <span class="stat-label">Únicas</span>
+                    <span class="stat-label">Cartas Únicas</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-number" id="rareCards">0</span>
-                    <span class="stat-label">Raras</span>
+                    <span class="stat-label">Cartas Raras</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-number" id="completeSets">0</span>
-                    <span class="stat-label">Sets</span>
+                    <span class="stat-label">Sets Completos</span>
                 </div>
             </div>
         </section>
@@ -70,12 +82,15 @@
                         <option value="all">Todos os Sets</option>
                         <option value="base">Base Set</option>
                         <option value="fossil">Fossil</option>
+                        <option value="jungle">Jungle</option>
+                        <option value="team-rocket">Team Rocket</option>
                     </select>
                     <select id="rarityFilter" class="filter-select">
                         <option value="all">Todas Raridades</option>
                         <option value="common">Common</option>
                         <option value="uncommon">Uncommon</option>
                         <option value="rare">Rare</option>
+                        <option value="holo">Holo Rare</option>
                     </select>
                     <input type="text" id="searchInput" placeholder="Buscar carta..." class="search-input">
                 </div>
@@ -83,11 +98,69 @@
                 <div class="cards-grid" id="cardsGrid"></div>
             </div>
         </section>
+
+        <section id="sobre" class="about">
+            <div class="container">
+                <h2 class="section-title">Sobre <span class="gradient-text">Mim</span></h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>Olá! Sou Pedro, um colecionador apaixonado por Pokémon TCG desde 1999. Minha jornada começou com as primeiras edições e, desde então, venho construindo uma coleção especial focada no Pokémon Absol, que sempre foi meu favorito.</p>
+                        <p>Este site é um espaço para compartilhar minha paixão e mostrar as cartas mais especiais da minha coleção. Cada carta tem uma história única e um lugar especial no meu coração.</p>
+                        <div class="about-stats">
+                            <div class="about-stat">
+                                <span class="stat-highlight">25+</span>
+                                <span>Anos Colecionando</span>
+                            </div>
+                            <div class="about-stat">
+                                <span class="stat-highlight">1000+</span>
+                                <span>Cartas na Coleção</span>
+                            </div>
+                            <div class="about-stat">
+                                <span class="stat-highlight">50+</span>
+                                <span>Cartas de Absol</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-image">
+                        <!-- Silhouette em CSS puro - sem imagem externa -->
+                        <div class="absol-silhouette">
+                            <div class="absol-silhouette-inner">
+                                <div class="absol-silhouette-emoji">🎴</div>
+                                <div class="absol-silhouette-text">ABSOL</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2024 Pedro's Absol Collection</p>
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3>Absol Collector</h3>
+                    <p>Preservando a história do Pokémon TCG, uma carta por vez.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Links Rápidos</h4>
+                    <ul>
+                        <li><a href="#home">Início</a></li>
+                        <li><a href="#colecao">Coleção</a></li>
+                        <li><a href="#sobre">Sobre</a></li>
+                    </ul>
+                </div>
+                <div class="footer-social">
+                    <h4>Redes Sociais</h4>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Instagram">📷</a>
+                        <a href="#" aria-label="Twitter">🐦</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Pedro's Absol Collection. Todos os direitos reservados.</p>
+            </div>
         </div>
     </footer>
 
