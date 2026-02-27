@@ -9,17 +9,17 @@ const setsData = [
         name: 'Base Set',
         year: '1999',
         // Caminho relativo a partir da raiz do repositório
-        image: 'images/cards/base-set/base-set.png',
+        image: 'images/base-set/base-set.png',
         cardCount: 102,
         description: 'A edição que começou tudo',
         color: '#E63946',
         // Lista das cartas que você tem nesse set
         // Cada carta precisa ter um arquivo de imagem em images/cards/base-set/
         cards: [
-            { name: 'Charizard',  number: '4/102',  image: 'images/cards/base-set/Charizard_BS_4.jpg' },
-            { name: 'Blastoise',  number: '2/102',  image: 'images/cards/base-set/Blastoise_BS_2.jpg' },
-            { name: 'Venusaur',   number: '15/102', image: 'images/cards/base-set/Venusaur_BS_15.jpg'  },
-            { name: 'Pikachu',    number: '58/102', image: 'images/cards/base-set/Pikachu_BS_58.jpg'   }
+            { name: 'Charizard',  number: '4/102',  image: 'images/base-set/Charizard_BS_4.jpg' },
+            { name: 'Blastoise',  number: '2/102',  image: 'images/base-set/Blastoise_BS_2.jpg' },
+            { name: 'Venusaur',   number: '15/102', image: 'images/base-set/Venusaur_BS_15.jpg'  },
+            { name: 'Pikachu',    number: '58/102', image: 'images/base-set/Pikachu_BS_58.jpg'   }
             // Adicione mais cartas aqui seguindo o mesmo padrão
         ]
     },
@@ -32,9 +32,9 @@ const setsData = [
         description: 'Pokémon pré-históricos',
         color: '#457B9D',
         cards: [
-            { name: 'Dragonite', number: '4/62',  image: 'images/cards/fossil/dragonite.jpg' },
-            { name: 'Gengar',    number: '5/62',  image: 'images/cards/fossil/gengar.jpg'    },
-            { name: 'Lapras',    number: '10/62', image: 'images/cards/fossil/lapras.jpg'    },
+            { name: 'Dragonite', number: '4/62',  image: 'images/fossil/dragonite.jpg' },
+            { name: 'Gengar',    number: '5/62',  image: 'images/fossil/gengar.jpg'    },
+            { name: 'Lapras',    number: '10/62', image: 'images/fossil/lapras.jpg'    },
             // Adicione mais cartas aqui
         ]
     },
@@ -47,9 +47,9 @@ const setsData = [
         description: 'Aventura na selva',
         color: '#2A9D8F',
         cards: [
-            { name: 'Clefable',  number: '1/64',  image: 'images/cards/jungle/clefable.jpg'  },
-            { name: 'Scyther',   number: '10/64', image: 'images/cards/jungle/scyther.jpg'   },
-            { name: 'Pikachu',   number: '60/64', image: 'images/cards/jungle/pikachu.jpg'   },
+            { name: 'Clefable',  number: '1/64',  image: 'images/jungle/clefable.jpg'  },
+            { name: 'Scyther',   number: '10/64', image: 'images/jungle/scyther.jpg'   },
+            { name: 'Pikachu',   number: '60/64', image: 'images/jungle/pikachu.jpg'   },
             // Adicione mais cartas aqui
         ]
     },
