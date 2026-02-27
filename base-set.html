@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base Set - Pedro's TCG Collection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Estilos adicionais para a página de set */
+        .set-header {
+            text-align: center;
+            padding: 8rem 2rem 2rem;
+            background: linear-gradient(135deg, rgba(255,107,107,0.1) 0%, rgba(78,205,196,0.1) 100%);
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .back-button {
+            display: inline-block;
+            margin: 2rem;
+            padding: 0.5rem 1rem;
+            background: var(--accent-primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <!-- Mesmo header do index.html -->
+    </header>
+
+    <div class="set-header">
+        <h1 id="setTitle" class="section-title">Base Set</h1>
+        <p id="setDescription" class="section-subtitle">A edição que começou tudo</p>
+        <a href="index.html" class="back-button"><i class="fas fa-arrow-left"></i> Voltar</a>
+    </div>
+
+    <div id="cardsGrid" class="cards-grid">
+        <div class="loading">Carregando cartas...</div>
+    </div>
+
+    <footer class="footer">
+        <!-- Mesmo footer do index.html -->
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
