@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Coleção de Pokémon TCG</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>🃏 Minha Coleção Pokémon TCG</h1>
+        <nav>
+            <a href="index.html" class="ativo">Coleção</a>
+            <a href="wishlist.html">Wishlist</a>
+            <a href="#" id="link-decks">Decks</a>
+            <a href="#" id="link-sobre">Sobre</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="controles">
+            <input type="text" id="busca" placeholder="Buscar carta...">
+            <select id="filtro-tipo">
+                <option value="todos">Todos os tipos</option>
+                <option value="Grama">Grama</option>
+                <option value="Fogo">Fogo</option>
+                <option value="Água">Água</option>
+                <option value="Elétrico">Elétrico</option>
+                <option value="Psíquico">Psíquico</option>
+                <option value="Lutador">Lutador</option>
+                <option value="Metálico">Metálico</option>
+                <option value="Sombrio">Sombrio</option>
+                <option value="Fada">Fada</option>
+                <option value="Dragão">Dragão</option>
+                <option value="Incolor">Incolor</option>
+            </select>
+        </section>
+
+        <div id="cartas-container" class="grade-cartas">
+            <!-- As cartas serão carregadas aqui pelo JavaScript -->
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
